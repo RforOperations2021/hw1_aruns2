@@ -93,12 +93,12 @@ ui <- fluidPage(
             
             #Show first data table - Top 10 costliest city
             checkboxInput(inputId = "costliest",
-                          label = "Region and average prices",
+                          label = "DATATABLE: Region and average prices",
                           value = TRUE),
             
             #Show second data table - 10 cheapest city
             checkboxInput(inputId = "cheapest",
-                          label = "City and year average prices",
+                          label = "DATATABLE: City and year average prices",
                           value = TRUE),
             
             # Enter text for plot title 
@@ -106,7 +106,7 @@ ui <- fluidPage(
                       label = "Plot title", 
                       placeholder = "Summary and year"),
             
-           
+            
             hr()
             
         ),
@@ -116,11 +116,15 @@ ui <- fluidPage(
             
             # first barchart --------------------------------------------
             plotOutput(outputId = "barchart_region"),
-            br(),        # a little bit of visual separation
+            br(),        # separation
             
             # second barchart
             plotOutput(outputId = "barchart_city"),
-            br(),        #a little bit of visual separation
+            br(),        #separation
+            
+            # third violin plot
+            plotOutput(outputId = "violinplot_com"),
+            br(),        #separation
             
             # data table
             DT::dataTableOutput(outputId = "table_costliest"),
@@ -155,6 +159,8 @@ server <- function(input, output, session) {
         city_year[city_year$Centre == input$city,]
     })
     
+    
+    
     # toTitleCase 
     pretty_plot_title <- reactive({ toTitleCase(input$plot_title) })
     
@@ -171,12 +177,22 @@ server <- function(input, output, session) {
     # plot for city
     output$barchart_city <- renderPlot({
         ggplot(city_subset(),
-               aes_string(x= city_subset()$year,
-                          y= city_subset()$price, fill =city_subset()$year ), color = "green")+
-            geom_bar(stat ="identity")+
+               aes_string(x= "year",
+                          y= "price" ), color = "green")+
+            geom_line(aes(group = 1))+
             xlab("City in India")+
             ylab("Yearly Avg prices for essential commodities")+
-            ggtitle(pretty_plot_title())
+            ggtitle("Price trend for commodity")
+        
+    })
+    
+    # plot for city
+    output$violinplot_com <- renderPlot({
+        ggplot(states_avg_month)+
+            geom_violin(aes_string(x= "Commodity",y= "price", fill = "Commodity" ))+
+            xlab("Prices")+
+            ylab("Essential commodities")+
+            ggtitle("Violin Plot for Commodities across Country")+ theme(axis.text.x = element_text(angle = 60, hjust =1, vjust =1, element_text( size = 12)))
         
     })
     
