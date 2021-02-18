@@ -15,8 +15,8 @@ library(forecast)
 #Inputs must use reactivity in a logical manner with all outputs displayed to users
 
 ## 1. Bar plot for average price for selected commodity region wise
-## 2. Bar plot for average price for selected commodity for selected city
-## 3. Line plot for average price for selected commodity over years
+## 2. Price trend for particular commodity over years
+## 3. Violin plot for prices of different commodities
 
 
 #read file
@@ -47,7 +47,6 @@ year <-  unique(states$year)
 
 #convert to USD
 states_avg_month$price_usd <- states_avg_month$price/70
-
 states_avg_month <- na.omit(states_avg_month)
 
 #regional avg
@@ -219,7 +218,7 @@ server <- function(input, output, session) {
             paste('file1.csv')
         },
         content = function(file) {
-            write.csv(city_subset, file)
+            write.csv(city_subset(), file)
         }
     )
 }
