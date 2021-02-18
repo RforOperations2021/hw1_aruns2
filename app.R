@@ -90,7 +90,7 @@ ui <- fluidPage(
                         choices = city_names,
                         selected = city_names[2]),
             
-            #Show first data table - Top 10 costliest city
+            #Show first data table - City wise data
             checkboxInput(inputId = "costliest",
                           label = "DATATABLE: Region and average prices",
                           value = TRUE),
