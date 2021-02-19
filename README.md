@@ -10,7 +10,7 @@ Currently, the App supports:
 Further, the App allows user to download the filtered data for a city or region.
 
 Way forward:
-- Add the most expensive and Cheapest cities and how do they stack up in comparison to average expenses.
+- Add the most expensive and cheapest cities; how do they stack up in comparison to average expenses.
 - Allow user to choose between INR or USD
 - Get them on a Map
 
