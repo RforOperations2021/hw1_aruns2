@@ -1,4 +1,6 @@
 # hw1_aruns2
 
-The R Shiny project works on the inflation data from India. 
+This R Shiny App looks at the inflation data of major Indian citites and conduct reactive Exploratory Data Analysis on the underlying data.
+Currently, the App supports:
+- 
 
