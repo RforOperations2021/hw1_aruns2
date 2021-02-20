@@ -20,23 +20,19 @@ library(forecast)
 
 
 #read file
-
 states <- read.csv("india_key_commodities.csv")
+
 
 #convert date and extract year
 states$Date <- dmy(states$Date)
 states$year <- year(states$Date)
 states$month <- month(states$Date)
-#states$month_year >- format_ISO8601(states$Date, precision = "ym")
-
-states$month_year <- format(states$Date, "%m-%Y")
+states$month_year <- format(states$Date, "%m-%Y") #extract month and year
 
 #summarise average price
 states_avg_month <- states %>% 
     group_by(year, Centre, Commodity, Region) %>% 
     summarise(price= mean(Price.per.Kg))
-#convert in dollars
-#assume 1 USD  = 70 INR
 
 #variable names
 city_names <- unique(states$Centre)
@@ -58,6 +54,7 @@ region_commodity <-  states_avg_month %>%
 city_year <-  states_avg_month %>% 
     group_by(Centre,year ) %>% 
     summarise(price = mean(price))
+
 #convert factor
 city_year$year <- as.factor(city_year$year)
 
@@ -179,9 +176,9 @@ server <- function(input, output, session) {
                aes_string(x= "year",
                           y= "price" ), color = "green")+
             geom_line(aes(group = 1))+
-            xlab("City in India")+
+            xlab("Year")+
             ylab("Yearly Avg prices for essential commodities")+
-            ggtitle("Price trend for commodity")
+            ggtitle("Price trend for commodity for the selected city")
         
     })
     
@@ -189,8 +186,8 @@ server <- function(input, output, session) {
     output$violinplot_com <- renderPlot({
         ggplot(states_avg_month)+
             geom_violin(aes_string(x= "Commodity",y= "price", fill = "Commodity" ))+
-            xlab("Prices")+
-            ylab("Essential commodities")+
+            ylab("Prices")+
+            xlab("Essential commodities")+
             ggtitle("Violin Plot for Commodities across Country")+ theme(axis.text.x = element_text(angle = 60, hjust =1, vjust =1, element_text( size = 12)))
         
     })
